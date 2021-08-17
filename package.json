@@ -1,0 +1,19 @@
+{
+  "name": "assessments-2-backend-un",
+  "version": "1.0.0",
+  "description": "web scraper",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sjdonado/assessment-2-backend-un-202130.git"
+  },
+  "author": "sjdonado",
+  "license": "GNU General Public License v3.0",
+  "bugs": {
+    "url": "https://github.com/sjdonado/assessment-2-backend-un-202130/issues"
+  },
+  "homepage": "https://github.com/sjdonado/assessment-2-backend-un-202130#readme"
+}
