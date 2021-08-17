@@ -20,6 +20,7 @@ npm run dev
 ```
 
 ## Run tests
+Make sure to set the env variable `ROYAL_FILMS_RESPONSE` before
 ```bash
 npm run rest
 ```
