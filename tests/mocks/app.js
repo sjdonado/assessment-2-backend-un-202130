@@ -8,13 +8,13 @@ async function request(method, url) {
 
   const res = {
     statusCode: null,
-    response: null,
+    body: null,
     headers: [],
     setHeader: function (key, value) {
       this.headers.push({ [key]: value });
     },
     end: function (response) {
-      this.response = JSON.parse(response);
+      this.body = JSON.parse(response);
     },
   };
 
