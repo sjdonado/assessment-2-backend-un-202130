@@ -23,7 +23,7 @@ async function getPageBody(url) {
         const elements = document.querySelectorAll('[class="my-3 col-lg-2 col-md-3 col-sm-4 col-6"] a')
         const links = []
         for (let element of elements) {
-            links.push(element.href) // Query selector All
+            links.push(element.href) //Query selector All
         }
         return links
     });
