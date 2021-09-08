@@ -72,7 +72,7 @@ async function getPageBody(url) {
 
 function parseToUrlNormal(url) {
 	//\\/[A-Za-z0-9\\_] inicia 30 termina ? https://www.youtube.com/embed/
-	//const start = 30
+	const start = 30
 	const end = url.indexOf('?')
 	const parsedURL = 'https://www.youtube.com/watch?v=' + url.substring(start, end)
 	return parsedURL
