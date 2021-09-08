@@ -28,20 +28,22 @@ async function getData(url) {
 		const links = []
 		$movies.forEach(($movies) => {
 			link= $movies.getAttribute("href")
+      const num = link.split("/") 
+      complete="https://royal-films.com/api/v1/movie/"+num[num.length-2]+"/barranquilla?"
+      links.push(complete)
       num = link.replace(/[^0-9\.]+/g, "");
-      complete="https://royal-films.com/api/v1/movie/"+num+"/barranquilla?"
-      links.push(complete)	
+      hipervinculo="https://royal-films.com/api/v1/movie/"+num+"/barranquilla?"
+      links.push(hipervinculo)
       })
 		return links	
 	  })
-     
-  //console.log("El resultado es:")
+
   await browser.close();
     return peliculas;
     
 }
 
-async function data(url){
+async function details(url){
   const browser = await puppeteer.launch();
   const page = await browser.newPage();
   await page.goto(url);
@@ -57,18 +59,17 @@ async function data(url){
     },url);
   await browser.close(); 
   return{
-  originalTitle:movieDetails.data['original'],
-  title:movieDetails.data['title'],
-  synopsis:movieDetails.data['synopsis'],
-  starred:movieDetails.data['starred'],
-  director:movieDetails.data['director'],
-  poster_photo:movieDetails.data['poster_photo'],
-  trailer:"https://www.youtube.com/watch?v="+movieDetails.data['youtube'],}
-
-
+    originalTitle:movieDetails.data['original'],
+    title:movieDetails.data['title'],
+    synopsis:movieDetails.data['synopsis'],
+    starred:movieDetails.data['starred'],
+    director:movieDetails.data['director'],
+    poster_photo:movieDetails.data['poster_photo']+"/",
+    trailer:'https://www.youtube.com/watch?v='+movieDetails.data['youtube'],}
 }
+
 module.exports = {
     getPageTitle,
     getData,
-    data,
+    details,
 };
