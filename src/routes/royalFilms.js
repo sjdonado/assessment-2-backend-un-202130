@@ -7,9 +7,7 @@ async function get(req, res) {
 		let originalTitle,title,synopsis,starred,director,posterPhoto,trailer,Aux;
 		let Mov = [];
 		for(var i = 0; i < Urls.length; i++){
-			console.log(Urls[i]);
 			Aux = await scraper.getMovieTextInfo(Urls[i]);
-			console.log(Aux);
 			title = Aux[0];
 			originalTitle = Aux[1];
 			starred = Aux[2];
