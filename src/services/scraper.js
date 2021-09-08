@@ -66,7 +66,7 @@ async function data(url){
   starred:movieDetails.data['starred'],
   director:movieDetails.data['director'],
   posterPhoto: "/"+movieDetails.data['poster_photo']+"/",
-  trailer: "/https://www.youtube.com/watch?v="+movieDetails.data.youtube,
+  trailer: "https://www.youtube.com/watch?v="+movieDetails.data.youtube+"/",
 }
   } catch (error) {
     
