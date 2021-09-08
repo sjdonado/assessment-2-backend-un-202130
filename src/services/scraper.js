@@ -26,7 +26,7 @@ async function getRawData(url) {
 	const browser = await puppeteer.launch();
 	const page = await browser.newPage();
 
-	await page.goto("https://royal-films.com/api/v1/movies/city/barranquilla/billboard");
+	await page.goto(url);
 	const rawData = await page.evaluate(() => {
 		return JSON.parse(document.querySelector("body").innerText);
 	});
