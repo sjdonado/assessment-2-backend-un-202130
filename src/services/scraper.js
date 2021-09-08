@@ -56,17 +56,15 @@ async function data(url){
       return movie.json();
     },url);
   await browser.close(); 
-  const dato=[]
-  dato.push( originalTitle=movieDetails.data['original'],
-  title=movieDetails.data['title'],
-  synopsis=movieDetails.data['synopsis'],
-  starred=movieDetails.data['starred'],
-  director=movieDetails.data['director'],
-  poster_photo=movieDetails.data['poster_photo'],
-  trailer="https://www.youtube.com/watch?v="+movieDetails.data['youtube'],
-)
+  return{
+  originalTitle:movieDetails.data['original'],
+  title:movieDetails.data['title'],
+  synopsis:movieDetails.data['synopsis'],
+  starred:movieDetails.data['starred'],
+  director:movieDetails.data['director'],
+  poster_photo:movieDetails.data['poster_photo'],
+  trailer:"https://www.youtube.com/watch?v="+movieDetails.data['youtube'],}
 
-  return dato
 
 }
 module.exports = {

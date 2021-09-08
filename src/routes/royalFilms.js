@@ -18,6 +18,7 @@ async function get(req, res) {
             pageTitle: pageTitle,
             allMoviesDetails:values
         }
+
         res.writeJSONResponse({ data: dataJson }, 200);
     } catch(err) {
         res.writeJSONResponse({ data: null, err: err.message }, 500);
