@@ -28,9 +28,11 @@ async function getData(url) {
 		const links = []
 		$movies.forEach(($movies) => {
 			link= $movies.getAttribute("href")
-      num = link.replace(/[^0-9\.]+/g, "");
-      complete="https://royal-films.com/api/v1/movie/"+num+"/barranquilla?"
-      links.push(complete)	
+      const num = link.split("/") 
+      
+      complete="https://royal-films.com/api/v1/movie/"+num[num.length-2]+"/barranquilla?"
+      links.push(complete)
+
       })
 		return links	
 	  })
@@ -42,7 +44,8 @@ async function getData(url) {
 }
 
 async function data(url){
-  const browser = await puppeteer.launch();
+  try {
+    const browser = await puppeteer.launch();
   const page = await browser.newPage();
   await page.goto(url);
     const movieDetails = await page.evaluate(async (url) => {
@@ -62,9 +65,13 @@ async function data(url){
   synopsis:movieDetails.data['synopsis'],
   starred:movieDetails.data['starred'],
   director:movieDetails.data['director'],
-  posterPhoto: movieDetails.data['poster_photo']+"/",
-  trailer: "https://www.youtube.com/watch?v="+movieDetails.data.youtube,
+  posterPhoto: "/"+movieDetails.data['poster_photo']+"/",
+  trailer: "/https://www.youtube.com/watch?v="+movieDetails.data.youtube,
 }
+  } catch (error) {
+    
+  }
+  
 
 }
 module.exports = {

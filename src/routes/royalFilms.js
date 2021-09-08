@@ -8,7 +8,6 @@ async function get(req, res) {
         const datas=[]
         
         for (i of pageData) {
-            
             x= scraper.data(i)
             datas.push(x) 
             
