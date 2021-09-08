@@ -22,9 +22,8 @@ async function getPageBody(url) {
 		const elements = document.querySelectorAll('[class="my-3 col-lg-2 col-md-3 col-sm-4 col-6"] a')
 		const links = []
 		for (let element of elements) {
-			links.push(element.href) // Query selector All
+			links.push(element.href)
 		}
-		//links.push(elements.href)
 		return links
 	});
 
@@ -40,18 +39,18 @@ async function getPageBody(url) {
 			const image = main.children[0].children[0].children[0].style.backgroundImage.slice(4, -1).replace(/"/g, "");
 			const main2 = main.children[1].children[1].children[1]
 			const props = main2.children[2].children[0].children
-			const synopsisMain = main2.children[0]
-			const synopsisP1 = synopsisMain.innerText
-			const synopsisP2 = synopsisMain.childNodes[2].innerText
-			const end = synopsisP2.indexOf('\n\n')
-			const sypnopsis = synopsisP1.substring(0, synopsisP1.length - 11) + synopsisP2.substring(0, end)
+			const synopsis_0 = main2.children[0]
+			const synopsis_1 = synopsis_0.innerText
+			const synopsis_2 = synopsis_0.childNodes[2].innerText
+			const end = synopsis_2.indexOf('\n\n')
+			const syn = synopsis_1.substring(0, synopsis_1.length - 11) + synopsis_2.substring(0, end)
 			const trailer = document.getElementById('player').children[0].children[0].src
 			var film
 			for (var i = 0, len = props.length; i < len; i++) {
 				film = {
 					originalTitle: props[1].children[1].innerText,
 					title: props[0].children[1].innerText,
-					synopsis: sypnopsis,
+					synopsis: syn,
 					starred: props[2].children[1].innerText,
 					director: props[3].children[1].innerText,
 					porterPhoto: image,
@@ -74,8 +73,8 @@ function parseToUrlNormal(url) {
 	//\\/[A-Za-z0-9\\_] inicia 30 termina ? https://www.youtube.com/embed/
 	const start = 30
 	const end = url.indexOf('?')
-	const parsedURL = 'https://www.youtube.com/watch?v=' + url.substring(start, end)
-	return parsedURL
+	const parsed_url = 'https://www.youtube.com/watch?v=' + url.substring(start, end)
+	return parsed_url
 
 }
 
