@@ -2,8 +2,7 @@ name: Assessment auto-review
 
 on:
  push
-  # pull_request:
-  #   types: [opened, synchronize, reopened]
+
 
 jobs:
   build:
