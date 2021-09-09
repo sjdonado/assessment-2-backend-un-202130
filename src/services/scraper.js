@@ -17,8 +17,8 @@ async function getPageTitle(url) {
 	return title;
 }
 
-async function getAllMoviesDetails(url) {
-	const browser = await puppeteer.launch();
+async function getLinksMovies(url){
+  const browser = await puppeteer.launch();
 	const page = await browser.newPage();
   
 	await page.goto(url, { waitUntil: 'networkidle0' });
@@ -35,12 +35,14 @@ async function getAllMoviesDetails(url) {
   
 	  await browser.close();
 
-	  const allMoviesDetails = [];
+    return links;
+}
+
+async function getMovieDetails(link) {
 
 	  try {
-      const browser = await puppeteer.launch();
-      const page = await browser.newPage();
-          for(let link of links){
+            const browser = await puppeteer.launch();
+            const page = await browser.newPage();
             await page.goto(link, { waitUntil: 'networkidle0' });
             const detailsMovie = await page.evaluate(async (link) => {
             //Obtenemos el Json de los url obtenidos
@@ -49,8 +51,9 @@ async function getAllMoviesDetails(url) {
             //Enviamos el Json
             return detailsMovie;
             },link);
+            await browser.close();
             
-            allMoviesDetails.push({
+            return {
                 originalTitle: detailsMovie.data['original'],
                 title: detailsMovie.data['title'],
                 synopsis: detailsMovie.data['synopsis'],
@@ -58,18 +61,17 @@ async function getAllMoviesDetails(url) {
                 director: detailsMovie.data['director'],
                 posterPhoto: detailsMovie.data['poster_photo'],
                 trailer: "https://youtube.com/watch?v="+detailsMovie.data.youtube
-            }); 
-          }
-          await browser.close();
+            }; 
+          
                   
       } catch (error) {
           console.log(error);
       }
   
-	  return allMoviesDetails;
   }
   
 module.exports = {
 	getPageTitle,
-	getAllMoviesDetails,
+	getMovieDetails,
+  getLinksMovies,
 };
