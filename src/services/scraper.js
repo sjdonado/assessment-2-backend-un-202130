@@ -20,7 +20,7 @@ async function getMoviesInfo(url) {
     return Promise.all(resp);
   });
 
-  const moviesData = (await moviesDataPromises).map(movie => ({
+  const moviesData = moviesDataPromises.map(movie => ({
     originalTitle: movie.data.original,
     title: movie.data.title,
     synopsis: movie.data.synopsis,
