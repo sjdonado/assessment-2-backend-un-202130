@@ -3,17 +3,20 @@ const scraper = require('../services/scraper');
 async function get(req, res) {
     try {
         const pageTitle = await scraper.getPageTitle('https://royal-films.com/cartelera/barranquilla');
-        const pageData = await scraper.getMoviesURL('https://royal-films.com/cartelera/barranquilla');
-        const AllInformation=[]
-        for (e of pageData) {
-            //Obtenemos urls y introducciomos su informacion de data en cada cadena
-            info= scraper.data_Json(e)
-            AllInformation.push(info) 
+        const pageData = await scraper.getData('https://royal-films.com/cartelera/barranquilla');
+
+        const datas=[]
+        
+        for (i of pageData) {
+            
+            x= scraper.details(i)
+            datas.push(x) 
+            
           }
-          let MoviesData = await Promise.all(AllInformation);
+          let info = await Promise.all(datas);
         const dataJson = {
             pageTitle: pageTitle,
-            allMoviesDetails:MoviesData
+            allMoviesDetails:info
         }
         res.writeJSONResponse({ data: dataJson }, 200);
     } catch(err) {
