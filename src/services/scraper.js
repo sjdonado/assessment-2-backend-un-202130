@@ -38,7 +38,10 @@ async function getMoviesDetails(url){
 			const details={}
 			details.originalTitle=document.querySelector('.people > tbody > tr:nth-child(2) > td').innerText
 			details.title=document.querySelector('.people tbody tr:nth-child(1) td').innerText
-			details.synopsis=document.querySelector('.synopsis').innerText
+			const p1=document.querySelector('.synopsis').innerText
+			const p2=document.querySelector('.synopsis > span:nth-child(2)').innerText
+			const end = p2.indexOf('\n\n')
+			details.synopsis=p1.substring(0,p1.length - 11) + p2.substring(0, end)
 			details.starred=document.querySelector('.people tbody tr:nth-child(3) td').innerText
 			details.director=document.querySelector('.people tbody tr:nth-child(4) td').innerText
 			details.postherPhoto=document.querySelector('#movie > div > div > div.col-xl-3.col-lg-4.col-md-5.col-sm-12 > div > span').style.backgroundImage.slice(4, -1).replace(/"/g, "")
