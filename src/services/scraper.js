@@ -49,13 +49,13 @@ async function data_Json(url){
       return movie;
     },url);
   await browser.close(); 
-  const originalTitle = movieInformation.data['original'];
-  const title = movieInformation.data['title'];
-  const synopsis = movieInformation.data['synopsis'];
-  const starred =  movieInformation.data['starred'];
-  const director = movieInformation.data['director'];
-  const posterPhoto=  movieInformation.data['poster_photo'];
-  const trailer = "https://youtube.com/watch?v="+movieInformation.data.youtube+"/";
+  const originalTitle = movieInformation.data.original.replace(/\n/g,"");
+  const title = movieInformation.data.title.replace(/\n/g,"");
+  const synopsis = movieInformation.data.synopsis.replace(/\n/g,"");
+  const starred =  movieInformation.data.starred.replace(/\n/g,"");
+  const director = movieInformation.data.director.replace(/\n/g,"");
+  const posterPhoto=  movieInformation.data.posterPhoto.replace(/\n/g,"");
+  const trailer = "https://youtube.com/watch?v="+movieInformation.data.youtube;
   return { 
   originalTitle,
   title,
