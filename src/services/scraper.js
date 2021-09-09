@@ -1,12 +1,21 @@
 const puppeteer = require('puppeteer');
 
+let browser;
+
+const initBrowser = async () => {
+  browser = await puppeteer.launch();
+}
+
 /**
  * Go to url and return the page title
  * @param {string} url
  * @returns {Promise<{title: string, movies: any[]}>}
  */
 async function getMoviesInfo(url) {
-  const browser = await puppeteer.launch();
+  if (browser === undefined) {
+    await initBrowser();
+  }
+
   const page = await browser.newPage();
 
   await page.goto(url, { waitUntil: 'networkidle0' });
@@ -30,10 +39,12 @@ async function getMoviesInfo(url) {
     trailer: `https://youtube.com/watch?v=${movie.data.youtube}`,
   }));
 
-  await browser.close();
+  await page.close();
 
   return { title, moviesData };
 }
+
+initBrowser();
 
 module.exports = {
   getMoviesInfo,
