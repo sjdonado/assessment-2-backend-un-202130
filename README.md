@@ -1,4 +1,4 @@
-# [Template] Royal Films scraper
+# Royal Films scraper
 
 Fork this project and modify the `./src/*` files in order to complete your assessment.
 
