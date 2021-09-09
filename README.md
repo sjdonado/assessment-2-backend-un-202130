@@ -1,49 +1,61 @@
 # [Template] Royal Films scraper
 
-Fork this project and modify the `./src/*` files in order to complete your assessment.
+This work is done to obtain data from a movie billboard
 
-**IMPORTANT: don't modify the `./tests` or `.github` folder, otherwise your PR will not be reviewed**
+To prove it https://github.com/kangcheng322/assessment-2-backend-un-202130.git
 
-Good luck!
+The fields to search for information are:
 
-## Setup azure VM
-```bash
-sudo apt-get install -y gconf-service libasound2 libatk1.0-0 libatk-bridge2.0-0 libc6 libcairo2 libcups2 libdbus-1-3 libexpat1 libfontconfig1 libgcc1 libgconf-2-4 libgdk-pixbuf2.0-0 libglib2.0-0 libgtk-3-0 libnspr4 libpango-1.0-0 libpangocairo-1.0-0 libstdc++6 libx11-6 libx11-xcb1 libxcb1 libxcomposite1 libxcursor1 libxdamage1 libxext6 libxfixes3 libxi6 libxrandr2 libxrender1 libxss1 libxtst6 ca-certificates fonts-liberation libappindicator1 libnss3 lsb-release xdg-utils wget libgbm-dev
-
-npm install
-```
-
-## Run in development (hot reload)
-```bash
-npm run dev
-```
-
-## Responses shapes
-
-- 200
-```js
 {
-  data: {
-    pageTitle: string,
-    allMoviesDetails: [
-      {
-        originalTitle: string,
-        title: string,
-        synopsis: string,
-        starred: string,
-        director: string,
-        posterPhoto: string,
-        trailer: string,
-      },
-      ...
-    ]
-  }
-}
-```
-- 404
-```js
+data: {
+pageTitle: string,
+allMoviesDetails: [
 {
-  data: null,
-  err: string,
+originalTitle: string,
+title: string,
+synopsis: string,
+starred: string,
+director: string,
+posterPhoto: string,
+trailer: string,
+},
+...
+]
 }
-```
+}
+
+This is an example of the response that returns
+{
+"data":{
+"pageTitle":"Cartelera Barranquilla - Royal Films",
+"allMoviesDetails":[
+{
+"originalTitle":"Paw Patrol",
+"title":"Paw Patrol",
+"synopsis":"¡Ellos son Paw Patrol! Cuando Humdinger, el rival más
+grande de todos, se convierte en alcalde de Adventure City comienza a
+causar estragos, Ryder, y nuestros cachorros favoritos se ponen en marcha
+para enfrentar el desafío. Mientras uno de los cachorros deberá de
+enfrentar su pasado en Adventure City, el equipo conoce a un nuevo aliado:
+Liberty, un inteligente perro salchicha. Juntos, armados con emocionantes
+nuevos artefactos y equipo lucharán para salvar a los ciudadanos de
+Adventure City. En esta primera aventura de PAW Patrol en la pantalla
+grande estarán los integrantes del elenco de la serie original y además
+Iain Armitage, Marsai Martin, Ron Pardo, Yara Shahidi, Kim Kardashian West,
+Randall Park, Dax Shepard con la presentación especial de Tyler Perry y
+Jimmy Kimmel, presentando a Will Brisbin.",
+"starred":"Iain Armitage, Marsai Martin, Ron Pardo, Yara Shahidi,
+Kim Kardashian West, Randall Park, Dax Shepard con la presentación especial
+de Tyler Perry y Jimmy Kimmel, presentando a Will Brisbin",
+"director":"Cal Brunker",
+"posterPhoto":"https://royal-films.com/assets/covers/1626875131274-pp-int-d
+igital-1-sht-collage-las-min.jpg",
+"trailer":"https://youtube.com/watch?v=95F4ZfIjRL0"
+}
+]
+}
+}
+
+References:
+https://nitayneeman.com/posts/understanding-semantic-commit-messages-using-git-and-angular/
+https://www.adictosaltrabajo.com/2020/02/27/testing-funcional-con-puppeteer/
