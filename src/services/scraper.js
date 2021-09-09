@@ -1,4 +1,5 @@
 const puppeteer = require('puppeteer');
+const axios = require('axios')
 
 /**
  * Go to url and return the page title
@@ -31,7 +32,24 @@ async function getUrls(url) {
 		return hrefs;
 	});
 	await browser.close();
-	return links;
+	const resp = await getInfoFromUrlMovie(links[0]);
+	return resp;
+}
+
+async function getInfoFromUrlMovie(url) {
+	let movieId = url.split('/')[5];
+	let link = "https://royal-films.com/api/v1/movie/"+movieId+"/barranquilla";
+	const apiResp = await axios.get(link);
+	let movieInfo = {
+		originalTitle: apiResp.data.data.original,
+		title: apiResp.data.data.title,
+		synopsis: apiResp.data.data.synopsis,
+		starred: apiResp.data.data.starred,
+		director: apiResp.data.data.director,
+		posterPhoto: apiResp.data.data.poster_photo,
+		trailer: `https://www.youtube.com/watch?v=${apiResp.data.data.youtube}`,
+	}
+	return movieInfo
 }
 
 module.exports = {
