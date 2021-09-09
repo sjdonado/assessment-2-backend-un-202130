@@ -27,14 +27,25 @@ async function getRawData(url) {
 	const page = await browser.newPage();
 
 	await page.goto(url);
-	const rawData = await page.evaluate(() => {
+	var initData = await page.evaluate(() => {
 		return JSON.parse(document.querySelector("body").innerText);
 	});
+
+
+	var rawData = [];
+	for (let index = 0; index < initData.data.length; index++) {
+		await page.goto(`https://royal-films.com/api/v1/movie/${initData.data[index].id}/barranquilla`);
+		var movies = await page.evaluate(() => {
+			return JSON.parse(document.querySelector("body").innerText);
+		});
+		rawData.push(movies.data);
+	}
 
 	await browser.close();
 
 	return rawData;
 }
+
 
 module.exports = {
 	getPageTitle,
