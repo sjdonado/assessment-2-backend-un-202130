@@ -17,8 +17,8 @@ async function getPageTitle(url) {
 	return title;
 }
 
-/*async function getLinksMovies(url){
-  const browser = await puppeteer.launch();
+async function getAllMoviesDetails(url) {
+	const browser = await puppeteer.launch();
 	const page = await browser.newPage();
   
 	await page.goto(url, { waitUntil: 'networkidle0' });
@@ -35,49 +35,20 @@ async function getPageTitle(url) {
   
 	  await browser.close();
 
-    return links;
-}*/
-
-async function getAllMovieDetails(url) {
-
-  const browser = await puppeteer.launch();
-	const page = await browser.newPage();
-  
-	await page.goto(url, { waitUntil: 'networkidle0' });
-	await page.waitForSelector('a.movie-box');
-	const links = await page.evaluate(() => {
-        const elements = document.querySelectorAll('a.movie-box');
-        const links = [];
-        for (let link of elements) {
-            links.push("https://royal-films.com/api/v1/movie/"+link.href.split("/")[5]+"/barranquilla");
-        }
-        return links;
-    });
-
-  
-	  await browser.close();
-
-    const allMoviesDetails = [];
+	  const allMoviesDetails = [];
 
 	  try {
-      for(let link of links){
-        const browser = await puppeteer.launch();
+          for(let link of links){
+            const browser = await puppeteer.launch();
             const page = await browser.newPage();
             await page.goto(link, { waitUntil: 'networkidle0' });
             const detailsMovie = await page.evaluate(async (link) => {
-            const res = await fetch(link,{
-                headers: {
-                  "Content-Type": "application/json",
-                },
-                method: "GET",
-                mode: "cors",
-              });
-              //const detailsMovie = await res.json();
-              return res.json();
+            const res = await fetch(link);
+            const detailsMovie = await res.json();
+            return detailsMovie;
             },link);
             await browser.close();
-            
-            allMoviesDetails.push( {
+            allMoviesDetails.push({
                 originalTitle: detailsMovie.data['original'],
                 title: detailsMovie.data['title'],
                 synopsis: detailsMovie.data['synopsis'],
@@ -86,20 +57,16 @@ async function getAllMovieDetails(url) {
                 posterPhoto: detailsMovie.data['poster_photo'],
                 trailer: "https://youtube.com/watch?v="+detailsMovie.data.youtube
             }); 
-      }
-            
-          
+          }
                   
       } catch (error) {
           console.log(error);
       }
-
-      return allMoviesDetails;
   
+	  return allMoviesDetails;
   }
   
 module.exports = {
 	getPageTitle,
-	getAllMovieDetails,
-  //getLinksMovies,
+	getAllMoviesDetails,
 };
