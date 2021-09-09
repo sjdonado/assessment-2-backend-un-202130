@@ -1,19 +1,25 @@
 const puppeteer = require('puppeteer');
 
 /**
+ * Return title
  * @param {string} url
  * @returns {string}
  */
+
 async function Get_Page_Title(url) {
+  
   const browser = await puppeteer.launch();
   const page = await browser.newPage();
   await page.goto(url, { waitUntil: 'networkidle0' });
   const title = await page.evaluate(() => document.querySelector('head > title').innerText);
   await browser.close();
+  
   return title;
+  
 }
 
 /**
+ * Return datos
  * @param {string} url
  * @returns {string}
  */
@@ -22,12 +28,11 @@ async function Get_INFORMATION(url) {
     const browser = await puppeteer.launch();
     const page = await browser.newPage();
     await page.goto(url, { waitUntil: 'networkidle0' });
-	await page.waitForSelector('[class=movie-box]')
+	  await page.waitForSelector('[class=movie-box]')
     
-  
-	const pelis = await page.evaluate(() => { 
-        const $p = document.querySelectorAll('[class="movie-box"]')
-        const urls = []
+	const peli = await page.evaluate(() => { 
+  const $p = document.querySelectorAll('[class="movie-box"]')
+  const urls = []
         $p.forEach(($p) => {
             link= $p.getAttribute("href")
 			dig = link.split("/");
@@ -40,8 +45,8 @@ async function Get_INFORMATION(url) {
     
 	const datos = [];
 	let i=0;
-	while(i<pelis.length){
-		const j = Get_Data(pelis[i])
+	while(i<peli.length){
+		const j = Get_Data(peli[i])
 		datos.push(j)
 		i++;
 	}
@@ -51,9 +56,11 @@ async function Get_INFORMATION(url) {
 
 
 /**
+ * Return everything else
  * @param {string} url
  * @returns {string}
  */
+
 async function Get_Data(url){
 	try {	
 	const browser = await puppeteer.launch();
@@ -61,14 +68,14 @@ async function Get_Data(url){
 	await page.goto(url);
 
 	const d = await page.evaluate(async(url) => {
-		const peli = await fetch(url, {
+		const pelicula = await fetch(url, {
 			headers: {
 				"Content-Type": "application/json",
 			},
 			method: "GET",
 			mode: "cors",
 		});
-		return peli.json();
+		return pelicula.json();
 	}, url);
 	await browser.close()
 
@@ -81,6 +88,7 @@ async function Get_Data(url){
 	posterPhoto: "/"+d.data['poster_photo']+"/",
 	trailer: "https://www.youtube.com/watch?v="+d.data.youtube+"/",
 	}
+    
 }catch (error){	}
 };
 module.exports = {
