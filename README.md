@@ -1,13 +1,8 @@
 # Royal Films scraper
 
-Fork this project and modify the `./src/*` files in order to complete your assessment.
-
-**IMPORTANT: don't modify the `./tests` or `.github` folder, otherwise your PR will not be reviewed**
-
-Good luck!
-
-This evalutaion is done to get the data from a movie billboard from royal films
-
+ESTUDIANTE : ANDRES MEZA
+CODIGO: 200115774
+THIS WORK IS A ROYAL  FILM SCRAPPER, TO GET DATA FROM CINEMA WEBSITE
 
 The fields to search for information are:
 
