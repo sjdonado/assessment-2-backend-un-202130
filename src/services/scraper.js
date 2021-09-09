@@ -43,7 +43,7 @@ async function getLinks(url){
 	return link1;
 };
 
-
+//get data from links 
 async function getAll(url){
 	try {	
 	const browser = await puppeteer.launch();
