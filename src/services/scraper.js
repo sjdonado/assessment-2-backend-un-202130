@@ -5,7 +5,7 @@ const puppeteer = require('puppeteer');
  * @param {string} url
  * @returns {string}
  */
-async function getPageTitleUrls(url) {
+async function getAllInfoPage(url) {
 	const browser = await puppeteer.launch();
 	const page = await browser.newPage();
 	await page.goto(url, { waitUntil: 'networkidle0' });
@@ -20,7 +20,7 @@ async function getPageTitleUrls(url) {
 	for (urls_i of urls) {
 		const movie_page = await browser.newPage();
 		await movie_page.goto(urls_i, { waitUntil: 'networkidle0' });
-		await movie_page.waitForTimeout('5000');
+		await movie_page.waitForTimeout('2000');
 		await movie_page.waitForSelector('td') // wait for the element
 		let elements_m = await movie_page.$$('td') // return all the elements with the class style given
 		let datos = []
@@ -73,5 +73,5 @@ async function getPageTitleUrls(url) {
 
 
 module.exports = {
-	getPageTitleUrls,
+	getAllInfoPage,
 };
