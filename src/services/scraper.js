@@ -80,7 +80,7 @@ async function Get_Data(url){
 	starred: d.data['starred'],
 	director: d.data['director'],
 	posterPhoto: "/"+d.data['poster_photo']+"/",
-	trailer: "https://www.youtube.com/watch?v="+d.data.youtube+"/",
+	trailer: "https://youtube.com/watch?v="+d.data.youtube+"/",
 	}
 }catch (error){	}
 };
