@@ -32,8 +32,12 @@ async function getUrls(url) {
 		return hrefs;
 	});
 	await browser.close();
-	const resp = await getInfoFromUrlMovie(links[0]);
-	return resp;
+	result = [];
+	for(let link of links){
+		result.push(getInfoFromUrlMovie(link))
+	}
+	console.log(result);
+	return await Promise.all(result)
 }
 
 async function getInfoFromUrlMovie(url) {
