@@ -24,9 +24,11 @@ async function getMoviesInfo(url) {
   const moviesDataPromises = await page.evaluate(async () => {
     const links = Array.from(document.querySelectorAll('.movie-box')).map(el => el.href);
     const movieIds = links.map(link => (new URL(link).pathname.split('/')[3]));
-    const resp = movieIds.map(movieId => fetch(`https://royal-films.com/api/v1/movie/${movieId}/barranquilla`).then(res => res.json()));
 
-    return await Promise.all(resp);
+    return await Promise.all(movieIds.map(async (movieId) => {
+      const resp = await fetch(`https://royal-films.com/api/v1/movie/${movieId}/barranquilla`);
+      return await resp.json();
+    }));
   });
 
   const moviesData = (await moviesDataPromises).map(movie => ({
