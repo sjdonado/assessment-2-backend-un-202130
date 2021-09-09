@@ -1,4 +1,5 @@
 const scraper = require('../services/scraper');
+require("events").EventEmitter.defaultMaxListeners = 15;
 
 async function get(req, res) {
 	try {
