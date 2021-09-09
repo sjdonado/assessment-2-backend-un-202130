@@ -21,15 +21,15 @@ async function getMoviesInfo(url) {
   await page.goto(url, { waitUntil: 'networkidle0' });
   const title = await page.evaluate(() => document.querySelector('head > title').innerText);
 
-  const moviesDataPromises = await page.evaluate(() => {
+  const moviesDataPromises = await page.evaluate(async () => {
     const links = Array.from(document.querySelectorAll('.movie-box')).map(el => el.href);
     const movieIds = links.map(link => (new URL(link).pathname.split('/')[3]));
     const resp = movieIds.map(movieId => fetch(`https://royal-films.com/api/v1/movie/${movieId}/barranquilla`).then(res => res.json()));
 
-    return Promise.all(resp);
+    return await Promise.all(resp);
   });
 
-  const moviesData = moviesDataPromises.map(movie => ({
+  const moviesData = (await moviesDataPromises).map(movie => ({
     originalTitle: movie.data.original,
     title: movie.data.title,
     synopsis: movie.data.synopsis,
