@@ -13,6 +13,7 @@ async function Get_Page_Title(url) {
   await browser.close();
   return title;
 }
+
 /**
  * Go to url and return the data of each movie
  * @param {string} url
@@ -29,44 +30,61 @@ async function Get_INFORMATION(url) {
         const urls = []
         $p.forEach(($p) => {
             link= $p.getAttribute("href")
-			dig = link.replace(/[^0-9\.]+/g, "");
-			urls.push(dig)    
+			dig = link.split("/");
+			rellenar="https://royal-films.com/api/v1/movie/"+dig[dig.length-2]+"/barranquilla?"
+			urls.push(rellenar)    
 		})
         return urls   
     })
     await browser.close();
-
+    
 	const datos = [];
 	let i=0;
 	while(i<pelis.length){
-		const url="https://royal-films.com/api/v1/movie/"+pelis[i]+"/barranquilla?"
-		datos.push(info(url))
+		const j = Get_Data(pelis[i])
+		datos.push(j)
 		i++;
 	}
     return datos;
 }
+
+
+
 /**
- * Go to url and return and get the information of each field of a movie
+ * Go to url and return and get movie data
  * @param {string} url
  * @returns {string}
  */
-async function info(url){
+async function Get_Data(url){
+	try {	
 	const browser = await puppeteer.launch();
-	const inf = await page.evaluate(() => {
-    return{
-          originalTitle: fetch(url).then(response => response.json()).then(f => f.data['original']),
-		  title: fetch(url).then(response => response.json()).then(f => f.data['title']),
-		  synopsis: fetch(url).then(response => response.json()).then(f => f.data['synopsis']),
-		  starred: fetch(url).then(response => response.json()).then(f => f.data['starred']),
-		  director: fetch(url).then(response => response.json()).then(f => f.data['director']),
-		  posterPhoto: fetch(url).then(response => response.json()).then(f => f.data['posterPhoto']),
-		  trailer: fetch(url).then(response => response.json()).then(f => "https://www.youtube.com/watch?v="+f.data['youtube'])
-    }	 
-	})
-    await browser.close(); 
-    return inf
-}
+	const page = await browser.newPage();
+	await page.goto(url);
 
+	const d = await page.evaluate(async(url) => {
+		const peli = await fetch(url, {
+			headers: {
+				"Content-Type": "application/json",
+			},
+			method: "GET",
+			mode: "cors",
+		});
+		return peli.json();
+	}, url);
+	await browser.close()
+
+
+	return {originalTitle: d.data['original'],
+	title: d.data['title'],
+	synopsis: d.data['synopsis'],
+	starred: d.data['starred'],
+	director: d.data['director'],
+	posterPhoto: "/"+d.data['poster_photo']+"/",
+	trailer: "https://www.youtube.com/watch?v="+d.data.youtube+"/",
+	}
+}catch (error){	}
+};
 module.exports = {
     Get_Page_Title,
+	Get_INFORMATION,
 };
