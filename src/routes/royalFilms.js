@@ -11,6 +11,11 @@ async function get(req, res) {
 	}
 }
 
+/**
+ * format raw data and convert it into the requirements
+ * @param {Array} rawData 
+ * @returns {Array}
+ */
 function getRawDataDetails(rawData){
 	return rawData.map((movie)=>{
 		return {

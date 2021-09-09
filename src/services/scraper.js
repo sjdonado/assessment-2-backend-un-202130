@@ -18,7 +18,7 @@ async function getPageTitle(url) {
 }
 
 /**
- * Go to an URL with JSON response and return raw JSON
+ * Go to an URL with JSON find individual id, check data response and return raw JSON
  * @param {strig} url 
  * @returns {JSON}
  */
@@ -31,7 +31,7 @@ async function getRawData(url) {
 		return JSON.parse(document.querySelector("body").innerText);
 	});
 
-
+	// catch individual movie url data and add to an array
 	var rawData = [];
 	for (let index = 0; index < initData.data.length; index++) {
 		await page.goto(`https://royal-films.com/api/v1/movie/${initData.data[index].id}/barranquilla`);
