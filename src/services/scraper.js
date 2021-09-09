@@ -49,8 +49,6 @@ async function getMoviesDetails(url){
 			details.trailer='https://www.youtube.com/watch?v='+trailer.substring(30,trailer.indexOf('?'))
 
 			return details
-			
-			//#movie > div > div > div.col-xl-9.col-lg-8.col-md-7.col-sm-12 > div > div:nth-child(2) > table > tbody > tr:nth-child(2) > td
 		})
 		movies.push(data)
 	}
