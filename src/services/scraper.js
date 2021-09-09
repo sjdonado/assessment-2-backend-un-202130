@@ -5,14 +5,14 @@ const puppeteer = require('puppeteer');
  * @param {string} url
  * @returns {string}
  */
-async function getPageTitle(url) {
-  const navigator = await puppeteer.launch();
-  const site = await navigator.newPage();
+ async function getPageTitle(url) {
+  const browser = await puppeteer.launch();
+  const page = await browser.newPage();
 
-  await site.goto(url, { waitUntil: 'networkidle0' });
-    const title = await site.evaluate(() => document.querySelector('head > title').innerText);
+  await page.goto(url, { waitUntil: 'networkidle0' });
+    const title = await page.evaluate(() => document.querySelector('head > title').innerText);
 
-    await navigator.close();
+    await browser.close();
 
     return title;
 }
