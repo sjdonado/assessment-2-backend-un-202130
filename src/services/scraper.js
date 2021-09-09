@@ -31,9 +31,9 @@ async function getPageBody(url) {
 	for (const link of links) {
 		console.log(link)
 		await page.goto(link, { waitUntil: 'networkidle0' });
-		await page.waitForTimeout(1000)
+		await page.waitForTimeout(800)
 		await page.click('[class="img gaussian"]')
-		await page.waitForTimeout(1000)
+		await page.waitForTimeout(800)
 		const film = await page.evaluate(() => {
 			const main = document.querySelector('[class="row"]')
 			const image = main.children[0].children[0].children[0].style.backgroundImage.slice(4, -1).replace(/"/g, "");
