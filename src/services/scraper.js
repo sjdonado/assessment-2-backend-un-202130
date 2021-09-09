@@ -38,9 +38,9 @@ async function getAllMoviesDetails(url) {
 	  const allMoviesDetails = [];
 
 	  try {
+      const browser = await puppeteer.launch();
+      const page = await browser.newPage();
           for(let link of links){
-            const browser = await puppeteer.launch();
-            const page = await browser.newPage();
             await page.goto(link, { waitUntil: 'networkidle0' });
             const detailsMovie = await page.evaluate(async (link) => {
             //Obtenemos el Json de los url obtenidos
@@ -49,7 +49,7 @@ async function getAllMoviesDetails(url) {
             //Enviamos el Json
             return detailsMovie;
             },link);
-            await browser.close();
+            
             allMoviesDetails.push({
                 originalTitle: detailsMovie.data['original'],
                 title: detailsMovie.data['title'],
@@ -60,6 +60,7 @@ async function getAllMoviesDetails(url) {
                 trailer: "https://youtube.com/watch?v="+detailsMovie.data.youtube
             }); 
           }
+          await browser.close();
                   
       } catch (error) {
           console.log(error);
