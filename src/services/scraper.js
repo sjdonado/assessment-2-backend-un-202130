@@ -16,75 +16,61 @@ async function getPageTitleUrls(url) {
 	for (const x of elements) {//  pathway taken by the elements 
 		urls.push('https://royal-films.com' + await page.evaluate(el => el.getAttribute('href'), x))
 	}
+	let date_movie_page = [];
+	for (urls_i of urls) {
+		const movie_page = await browser.newPage();
+		await movie_page.goto(urls_i, { waitUntil: 'networkidle0' });
+		await movie_page.waitForTimeout('5000');
+		await movie_page.waitForSelector('td') // wait for the element
+		let elements_m = await movie_page.$$('td') // return all the elements with the class style given
+		let datos = []
+		for (let x of elements_m) {//  pathway taken by the elements 
+			// console.log(x);
+			datos.push(await movie_page.evaluate(el => el.textContent, x));
+		}
+		// console.log(datos);
+		await movie_page.waitForSelector('.img') // wait for the element
+		let elements_mm = await movie_page.$('.img') // return all the elements with the class style given
+		let contentarry = await movie_page.evaluate(el => el.getAttribute('style'), elements_mm);
+		contentarry = contentarry.substring(23, contentarry.length - 3);
+		datos.push(contentarry);
 
-	const movie_page = await browser.newPage();
-	await movie_page.goto(urls[0], { waitUntil: 'networkidle0' });
-	await movie_page.waitForTimeout('5000');
-	await movie_page.waitForSelector('td') // wait for the element
-	let elements_m = await movie_page.$$('td') // return all the elements with the class style given
-	let datos = []
-	for (let x of elements_m) {//  pathway taken by the elements 
-		// console.log(x);
-		datos.push(await movie_page.evaluate(el => el.textContent, x));
+		await movie_page.waitForSelector('.synopsis') // wait for the element
+		let x = await movie_page.$('.synopsis') // return all the elements with the class style given
+		let syn1 = await movie_page.evaluate(el => el.textContent, x)
+		let synopsis = await syn1.trim()
+		synopsis = synopsis.split('\n');
+		let content = synopsis[0];
+		content = content.replace(/\./g, '');
+		datos.push(content);
+
+		await movie_page.click('[class="img gaussian"]');
+		await movie_page.waitForSelector('iframe') // wait for the element
+		let elements_mmm = await movie_page.$('iframe') // return all the elements with the class style given
+		let contentv = await movie_page.evaluate(el => el.getAttribute('src'), elements_mmm);
+		// console.log(contentv);
+		let trai = 'https://www.youtube.com/watch?v=' + contentv.substring(30, contentv.indexOf('?'))
+		// console.log(trai);
+		datos.push(trai);
+		// console.log(datos);
+		let dicc = await {
+			originalTitle: datos[1],
+			title: datos[0],
+			synopsis: datos[5],
+			starred: datos[2],
+			director: datos[3],
+			posterPhoto: datos[4],
+			trailer: datos[6]
+		}
+		date_movie_page.push(dicc);
 	}
-	console.log(datos);
-
-	await movie_page.waitForSelector('.synopsis') // wait for the element
-	let x = await movie_page.$('.synopsis') // return all the elements with the class style given
-	let syn1 = await movie_page.evaluate(el => el.textContent, x)
-	let synopsis = await syn1.trim()
-	synopsis = synopsis.split('\n');
-	let content = synopsis[0];
-	content = content.replace(/\./g, '');
-	datos.push(content);
-	let dicc = await {
-		originalTitle: datos[1],
-		title: datos[0],
-		synopsis: datos[4],
-		starred: datos[2],
-		director: datos[3],
-	}
-	console.log(dicc);
-
 
 
 	await browser.close();
 
-	return { title, dicc };
+	return { title, date_movie_page };
 }
 
-// async function getMoviesDetails(url) {
-// 	const browser = await puppeteer.launch();
-// 	const movie_page = await browser.newPage();
-// 	await movie_page.goto(url, { waitUntil: 'networkidle0' });
-// 	await movie_page.waitForTimeout('5000');
-// 	await movie_page.waitForSelector('td') // wait for the element
-// 	let elements = await movie_page.$$('td') // return all the elements with the class style given
-// 	let datos = []
-// 	for (let x of elements) {//  pathway taken by the elements 
-// 		// console.log(x);
-// 		datos.push(await movie_page.evaluate(el => el.textContent, x));
-// 	}
-// 	// await movie_page.waitForSelector('.synopsis') // wait for the element
-// 	// let x = await movie_page.$('.synopsis') // return all the elements with the class style given
-// 	// let syn1 = await movie_page.evaluate(el => el.textContent, x)
-// 	// let synopsis = await syn1.trim()
-// 	// synopsis = synopsis.split('\n');
-// 	// let content = synopsis[0];
-// 	// content = content.replace(/\./g, '');
-// 	// data.push(content);
-// 	// let dicc = await {
-// 	// 	originalTitle: data[1],
-// 	// 	title: data[0],
-// 	// 	synopsis: data[4],
-// 	// 	starred: data[2],
-// 	// 	director: data[3],
-// 	// }
-// 	// console.log(dicc);
-// 	console.log("Finisheeeeeeddddd")
-// 	console.log(datos);
-// 	return datos;
-// }
 
 module.exports = {
 	getPageTitleUrls,
