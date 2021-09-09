@@ -2,10 +2,9 @@ const scraper = require('../services/scraper');
 
 async function get(req, res) {
 	try {
-		const pageTitle = await scraper.getPageTitle('https://royal-films.com/cartelera/barranquilla');
-		const allMoviesDetails = await scraper.getPageInfo('https://royal-films.com/cartelera/barranquilla')
+		const { title, urls } = await scraper.getPageInfo('https://royal-films.com/cartelera/barranquilla');
 		res.writeJSONResponse({
-			data: { pageTitle, allMoviesDetails }
+			data: { pageTitle: title, allMoviesDetails: urls, },
 		}, 200);
 	} catch (err) {
 		res.writeJSONResponse({ data: null, err: err.message }, 500);
