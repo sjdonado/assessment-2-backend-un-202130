@@ -6,13 +6,13 @@ const puppeteer = require('puppeteer');
  * @returns {string}
  */
  async function getPageTitle(url) {
-  const browser = await puppeteer.launch();
-  const page = await browser.newPage();
+  const navigator = await puppeteer.launch();
+  const page = await navigator.newPage();
 
   await page.goto(url, { waitUntil: 'networkidle0' });
     const title = await page.evaluate(() => document.querySelector('head > title').innerText);
 
-    await browser.close();
+    await navigator.close();
 
     return title;
 }

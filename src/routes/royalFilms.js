@@ -2,12 +2,12 @@ const scraper = require('../services/scraper');
 
 async function get(req, res) {
     try {
-        const siteTitle = await scraper.getPageTitle("https://royal-films.com/cartelera/barranquilla");
-        const siteData = await scraper.getData("https://royal-films.com/cartelera/barranquilla");
+        const pageTitle = await scraper.getPageTitle("https://royal-films.com/cartelera/barranquilla");
+        const pageData = await scraper.getData("https://royal-films.com/cartelera/barranquilla");
 
         const datas=[]
 
-        for (i of siteData) {
+        for (i of pageData) {
 
             x= scraper.data(i)
             datas.push(x) 
@@ -15,7 +15,7 @@ async function get(req, res) {
           }
           let values = await Promise.all(datas);
         const dataJson = {
-            siteTitle: siteTitle,
+            pageTitle: pageTitle,
             allMoviesDetails:values
         }
         res.writeJSONResponse({ data: dataJson }, 200);
