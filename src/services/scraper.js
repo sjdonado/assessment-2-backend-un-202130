@@ -39,9 +39,10 @@ async function getAllMoviesDetails(url) {
 
 	  try {
       const browser = await puppeteer.launch();
-      const page = await browser.newPage();
+      
           for(let link of links){
-            await page.goto(link, { waitUntil: 'networkidle0' });
+            const page = await browser.newPage();
+            await page.goto(link);
             const detailsMovie = await page.evaluate(async (link) => {
             //Obtenemos el Json de los url obtenidos
             const res = await fetch(link);
