@@ -3,7 +3,9 @@ const puppeteer = require('puppeteer');
 let browser;
 
 const initBrowser = async () => {
-  browser = await puppeteer.launch();
+  if (browser === undefined) {
+    browser = await puppeteer.launch();
+  }
 }
 
 /**
@@ -12,9 +14,7 @@ const initBrowser = async () => {
  * @returns {Promise<{title: string, movies: any[]}>}
  */
 async function getMoviesInfo(url) {
-  if (browser === undefined) {
-    await initBrowser();
-  }
+  await initBrowser();
 
   const page = await browser.newPage();
 
@@ -44,7 +44,9 @@ async function getMoviesInfo(url) {
   return { title, moviesData };
 }
 
-initBrowser();
+if (process.env.NODE_ENV !== 'test') {
+  initBrowser();
+}
 
 module.exports = {
   getMoviesInfo,
