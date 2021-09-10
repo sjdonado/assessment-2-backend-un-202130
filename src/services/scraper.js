@@ -50,34 +50,36 @@ async function getAllMoviesDetails(url) {
         }
         return links;
     });
-        await page.close();
-	  const allMoviesDetails = [];
+    await browser.close();
 
-	  try {
-          for(let link of links){
-            page = await browser.newPage();
-            //await page.goto(link, { waitUntil: 'networkidle0' });
-            await page.goto(url);
-            const detailsMovie = await page.evaluate(async (link) => {
-            //Get Json from urls
-            const req = await fetch(link);
-            const detailsMovie = await req.json();
-            //Set Json
-            return detailsMovie;
-            },link);
-			//Add Moviedata to all movie details
-            allMoviesDetails.push({
-                originalTitle: detailsMovie.data['original'],
-                title: detailsMovie.data['title'],
-                synopsis: detailsMovie.data['synopsis'],
-                starred: detailsMovie.data['starred'],
-                director: detailsMovie.data['director'],
-                posterPhoto: detailsMovie.data['poster_photo'],
-                trailer: "https://youtube.com/watch?v="+detailsMovie.data.youtube
-            }); 
-            //await page.close();
+    const allMoviesDetails = [];
 
-          }
+    try {
+    const browser = await puppeteer.launch();
+
+        for(let link of links){
+          const page = await browser.newPage();
+          await page.goto(link);
+          const detailsMovie = await page.evaluate(async (link) => {
+          //Get Json from urls
+          const res = await fetch(link);
+          //Set Json
+          const detailsMovie = await res.json();
+          //Add Moviedata to all movie details
+          return detailsMovie;
+          },link);
+
+          allMoviesDetails.push({
+              originalTitle: detailsMovie.data['original'],
+              title: detailsMovie.data['title'],
+              synopsis: detailsMovie.data['synopsis'],
+              starred: detailsMovie.data['starred'],
+              director: detailsMovie.data['director'],
+              posterPhoto: detailsMovie.data['poster_photo'],
+              trailer: "https://youtube.com/watch?v="+detailsMovie.data.youtube
+          }); 
+        }
+        await browser.close();
                   
       } catch (error) {
           console.log(error);
