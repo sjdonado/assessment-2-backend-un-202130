@@ -1,20 +1,21 @@
 const puppeteer = require('puppeteer');
-
+    let browser;
 /**
  * Go to url and return the page title
  * @param {string} url
  * @returns {string}
  */
+const initBrowser =  async()=>{
+    browser = await puppeteer.launch();
+    return browser
+}
 async function getPageTitle(url) {
-  const browser = await puppeteer.launch();
-  const page = await browser.newPage();
-
-  await page.goto(url, { waitUntil: 'networkidle0' });
+   const page = await browser.newPage();
+  //await page.goto(url, { waitUntil: 'networkidle0' });
+  await page.goto(url);
 	const title = await page.evaluate(() => document.querySelector('head > title').innerText);
-
-	await browser.close();
-
-	return title;
+	await page.close();
+    return title;
 }
 /**
  * Go to url and return the page title
@@ -22,11 +23,10 @@ async function getPageTitle(url) {
  * @returns  {ArrayConstructor}
  */
 async function getAllMoviesDetails(url) {
-	const browser = await puppeteer.launch();
 	const page = await browser.newPage();
-  
-	await page.goto(url, { waitUntil: 'networkidle0' });
-	await page.waitForSelector('[class="my-3 col-lg-2 col-md-3 col-sm-4 col-6"] a');
+    //await page.goto(url, { waitUntil: 'networkidle0' });
+    await page.goto(url);
+    await page.waitForSelector('[class="my-3 col-lg-2 col-md-3 col-sm-4 col-6"] a');
 	const links = await page.evaluate(() => {
         const elements = document.querySelectorAll('[class="my-3 col-lg-2 col-md-3 col-sm-4 col-6"] a');
 		const links = [];
@@ -37,17 +37,14 @@ async function getAllMoviesDetails(url) {
         }
         return links;
     });
-
-  
-	  await browser.close();
-
+    await page.close();
 	  const allMoviesDetails = [];
 
 	  try {
           for(let link of links){
-            const browser = await puppeteer.launch();
             const page = await browser.newPage();
-            await page.goto(link, { waitUntil: 'networkidle0' });
+            //await page.goto(link, { waitUntil: 'networkidle0' });
+            await page.goto(url);
             const detailsMovie = await page.evaluate(async (link) => {
             //Get Json from urls
             const req = await fetch(link);
@@ -55,7 +52,6 @@ async function getAllMoviesDetails(url) {
             //Set Json
             return detailsMovie;
             },link);
-            await browser.close();
 			//Add Moviedata to all movie details
             allMoviesDetails.push({
                 originalTitle: detailsMovie.data['original'],
@@ -66,6 +62,8 @@ async function getAllMoviesDetails(url) {
                 posterPhoto: detailsMovie.data['poster_photo'],
                 trailer: "https://youtube.com/watch?v="+detailsMovie.data.youtube
             }); 
+            await page.close();
+
           }
                   
       } catch (error) {
@@ -74,6 +72,10 @@ async function getAllMoviesDetails(url) {
   
 	  return allMoviesDetails;
   }
+
+    if(process.env.NODE_ENV!= 'test'){
+        initBrowser();
+    }
 //   /**
 //  * format raw data and convert it into the requirements
 //  * @param {Array} Data 
@@ -97,5 +99,6 @@ async function getAllMoviesDetails(url) {
 module.exports = {
 	getPageTitle,
 	getAllMoviesDetails,
+    initBrowser,
 	//getDataDetails,
 };
