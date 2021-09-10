@@ -63,7 +63,7 @@ async function getLinkM(url) {
 			 synopsis:movieData['synopsis'],
 			 starred:movieData.data['starred'],
 			 director: movieData.data['director'],
-			 posterPhoto: "/"+movieData.data['poster_photo']+"/",
+			 posterPhoto: movieData.data['poster_photo'],
 			 trailer: "https://youtube.com/watch?v="+movieData.data.youtube+"/",
 		 }
 

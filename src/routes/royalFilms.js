@@ -8,8 +8,8 @@ async function get(req, res) {
 		const Data=[];
 
         PageData.forEach(element=>{
-			x=scraper.getMovies(element)
-			Data.push(x)
+			i=scraper.getMovies(element)
+			Data.push(i)
 		})
 
 		let info=await Promise.all(Data);
@@ -19,7 +19,7 @@ async function get(req, res) {
             allMoviesDetails:info
 		}
 
-		res.writeJSONResponse({ data: { DataJS } }, 200);
+		res.writeJSONResponse({ data: DataJS }, 200);
 	} catch(err) {
 		res.writeJSONResponse({ data: null, err: err.message }, 500);
 	}
