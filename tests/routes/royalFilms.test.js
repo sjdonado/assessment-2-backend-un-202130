@@ -4,6 +4,7 @@ const appMock = require('../mocks/app');
 
 describe('GET /royal-films/barranquilla', () => {
   let res;
+
   beforeEach(async () => {
     res = await appMock.request('GET', '/royal-films/barranquilla');
 

@@ -9,6 +9,7 @@ async function listener(req, res) {
   }
   switch (req.url) {
     case '/royal-films/barranquilla':
+
       await royalFilmsRoute.get(req, res);
       break;
     default:
