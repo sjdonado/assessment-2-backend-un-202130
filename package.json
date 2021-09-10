@@ -19,6 +19,8 @@
   },
   "homepage": "https://github.com/sjdonado/assessment-2-backend-un-202130#readme",
   "dependencies": {
+    "fetch": "^1.1.0",
+    "node-fetch": "^3.0.0",
     "nodemon": "^2.0.12",
     "puppeteer": "^10.2.0"
   },
