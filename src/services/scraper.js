@@ -1,23 +1,30 @@
-const puppeteer = require('puppeteer');
+const puppeteer = require("puppeteer");
+
+let browser;
+(async () => {
+	browser = await puppeteer.launch();
+})();
 
 /**
  * Go to url and return the page title
  * @param {string} url
  * @returns {string}
  */
-async function getPageTitle(url) {
-  const browser = await puppeteer.launch();
+
+async function getPageTitle(url,browser) {
+
   const page = await browser.newPage();
+  await page.goto(url, { waitUntil: "networkidle0" });
+  const title = await page.evaluate(
+    () => document.querySelector("head > title").innerText
+  );
 
-  await page.goto(url, { waitUntil: 'networkidle0' });
-	const title = await page.evaluate(() => document.querySelector('head > title').innerText);
+  await page.close();
 
-	await browser.close();
-
-	return title;
+  return title;
 }
 
-async function getMovieTextInfo(url){
+/* async function getMovieTextInfo(url){
 	const browser = await puppeteer.launch();
 	const page = await browser.newPage();
 	await page.setRequestInterception(true);
@@ -51,8 +58,8 @@ async function getMovieTextInfo(url){
 	
 	return AllMovieInfo;
 
-}
-async function getVideo(url) {
+} */
+/* async function getVideo(url) {
 	const browser = await puppeteer.launch();
 	const page = await browser.newPage();
 	await page.goto(url, { waitUntil: 'networkidle0' });
@@ -64,8 +71,8 @@ async function getVideo(url) {
   
 	 return Video;
   }
-
-	  async function getImage(url) {
+ */
+/*  async function getImage(url) {
 		const browser = await puppeteer.launch();
 		const page = await browser.newPage();
 		await page.goto(url, { waitUntil: 'networkidle0' });
@@ -77,39 +84,42 @@ async function getVideo(url) {
 	
 		return urlimage;
 	  }
+*/
+async function getAllURLMovies(url,browser) {
+  const page = await browser.newPage();
+  await page.goto(url, { waitUntil: "networkidle0" });
+  await page.waitForSelector("div > div > div > div > a");
+  const AllUrl = await page.evaluate(() =>
+    Array.from(
+      document.querySelectorAll("div > div > div > div > div > a"),
+      (element) => element.href
+    )
+  );
+  await page.close();
+  return AllUrl;
+}
 
-  async function getAllURLMovies(url){
-	const browser = await puppeteer.launch();
-	const page = await browser.newPage();
-	await page.goto(url, { waitUntil: 'networkidle0' });
-	await page.waitForSelector('div > div > div > div > a');
-	const AllUrl = await page.evaluate(() => Array.from(document.querySelectorAll('div > div > div > div > div > a'), element => element.href));
+async function getAllFetchMovies(identifier,browser) {
+  const page = await browser.newPage();
+  const fetchurl =
+    "https://royal-films.com/api/v1/movie/" + identifier + "/barranquilla";
+  const fetching = await page.evaluate(async (fetchurl) => {
+    const Details = await fetch(fetchurl, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      method: "GET",
+      mode: "cors",
+    });
+    return Details.json();
+  }, fetchurl);
 
-	return AllUrl;
-  
-  }
-
-  async function getAllFetchMovies(identifier){
-
-	const browser = await puppeteer.launch();
-	const page = await browser.newPage();
-	const fetchurl = 'https://royal-films.com/api/v1/movie/'+identifier+'/barranquilla'
-	const fetching = await page.evaluate(async (fetchurl) => {
-		const Details = await fetch(fetchurl, {
-		  headers: {
-			"Content-Type": "application/json",
-		  },
-		  method: "GET",
-		  mode: "cors",
-		});
-		return Details.json();
-	  },fetchurl);
-
-	await browser.close();
-	return fetching;
-  }
-
+  await page.close();
+  return fetching;
+}
 
 module.exports = {
-	getPageTitle,getAllURLMovies,getImage,getVideo,getMovieTextInfo,getAllFetchMovies
+  getPageTitle,
+  getAllURLMovies,
+  /*getImage,getVideo,getMovieTextInfo */ getAllFetchMovies,
 };
