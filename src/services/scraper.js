@@ -1,20 +1,31 @@
 const puppeteer = require('puppeteer');
-    let browser;
+    //let browser;
 /**
  * Go to url and return the page title
  * @param {string} url
  * @returns {string}
  */
-const initBrowser =  async()=>{
-    browser = await puppeteer.launch();
-    return browser
-}
-async function getPageTitle(url) {
-   const page = await browser.newPage();
-  //await page.goto(url, { waitUntil: 'networkidle0' });
-  await page.goto(url);
+// const initBrowser =  async()=>{
+//     browser = await puppeteer.launch();
+//     return browser
+// }
+async function getAllContent(url) {
+    const browser = await puppeteer.launch();
+    const page = await browser.newPage();
+   //await page.goto(url, { waitUntil: 'networkidle0' });
+     await page.goto(url);
+        const pageTitle = await getPageTitle(page)
+        const allMoviesDetails =  await getAllMoviesDetails(page)
+        await browser.close();
+        return {pageTitle, allMoviesDetails: MoviesDetails}
+ }
+async function getPageTitle(page) {
+    //browser = await puppeteer.launch();
+    //const page = await browser.newPage();
+    //await page.goto(url, { waitUntil: 'networkidle0' });
+    //await page.goto(url);
 	const title = await page.evaluate(() => document.querySelector('head > title').innerText);
-	await page.close();
+	//await browser.close();
     return title;
 }
 /**
@@ -22,11 +33,12 @@ async function getPageTitle(url) {
  * @param {string} url
  * @returns  {ArrayConstructor}
  */
-async function getAllMoviesDetails(url) {
-	const page = await browser.newPage();
+async function getAllMoviesDetails(page) {
     //await page.goto(url, { waitUntil: 'networkidle0' });
-    await page.goto(url);
-    await page.waitForSelector('[class="my-3 col-lg-2 col-md-3 col-sm-4 col-6"] a');
+    //browser = await puppeteer.launch();
+    //const page = await browser.newPage();
+    //await page.goto(url);
+    //await page.waitForSelector('[class="my-3 col-lg-2 col-md-3 col-sm-4 col-6"] a');
 	const links = await page.evaluate(() => {
         const elements = document.querySelectorAll('[class="my-3 col-lg-2 col-md-3 col-sm-4 col-6"] a');
 		const links = [];
@@ -37,14 +49,14 @@ async function getAllMoviesDetails(url) {
         }
         return links;
     });
-    await page.close();
+    //await page.close();
 	  const allMoviesDetails = [];
 
 	  try {
           for(let link of links){
-            const page = await browser.newPage();
+            //const page = await browser.newPage();
             //await page.goto(link, { waitUntil: 'networkidle0' });
-            await page.goto(url);
+            //await page.goto(url);
             const detailsMovie = await page.evaluate(async (link) => {
             //Get Json from urls
             const req = await fetch(link);
@@ -62,20 +74,20 @@ async function getAllMoviesDetails(url) {
                 posterPhoto: detailsMovie.data['poster_photo'],
                 trailer: "https://youtube.com/watch?v="+detailsMovie.data.youtube
             }); 
-            await page.close();
+            //await page.close();
 
           }
                   
       } catch (error) {
           console.log(error);
       }
-  
+      //await browser.close();
 	  return allMoviesDetails;
   }
 
-    if(process.env.NODE_ENV!= 'test'){
-        initBrowser();
-    }
+    // if(process.env.NODE_ENV!= 'test'){
+    //     initBrowser();
+    // }
 //   /**
 //  * format raw data and convert it into the requirements
 //  * @param {Array} Data 
@@ -99,6 +111,7 @@ async function getAllMoviesDetails(url) {
 module.exports = {
 	getPageTitle,
 	getAllMoviesDetails,
-    initBrowser,
+    //initBrowser,
+    getAllContent,
 	//getDataDetails,
 };

@@ -1,12 +1,12 @@
 const appMock = require('../mocks/app');
-const { initBrowser } = require('../../src/services/scraper');
+// const { initBrowser } = require('../../src/services/scraper');
 // const royalFilmsResponse = JSON.parse(process.env.ROYAL_FILMS_RESPONSE);
 
 describe('GET /royal-films/barranquilla', () => {
   let res;
-  beforeAll(async () =>{
-    await initBrowser();
-  });
+  // beforeAll(async () =>{
+  //   await initBrowser();
+  // });
   
   beforeEach(async () => {
     res = await appMock.request('GET', '/royal-films/barranquilla');
