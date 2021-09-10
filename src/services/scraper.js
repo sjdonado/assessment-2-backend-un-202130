@@ -44,17 +44,16 @@ async function getPageInfo(url) {
   const films = [];
 
   for (const url in urls) {
-    //console.log(urls[url]);
+    console.log(urls[url]);
     await page.goto(urls[url], { waitUntil: 'load', timeout: 0 });
     await page.waitForTimeout(4000);
     await page.waitForSelector('table.people td');
     const film = await page.evaluate(() => {
-      let tds = [];
       let data = document.querySelectorAll('table.people td');
       let sip = document.querySelector('p.synopsis').innerText;
       let photo = document.querySelector('span.gaussian').style.backgroundImage.slice(4, -1).replace(/"/g, "");;
       let trailer = "https://youtube.com/watch?v=95F4ZfIjRL0";
-      tds.push({
+      return {
         "originalTitle": data[1].innerText,
         "title": data[0].innerText,
         "synopsis": sip,
@@ -62,10 +61,8 @@ async function getPageInfo(url) {
         "director": data[3].innerText,
         "posterPhoto": photo,
         "trailer": trailer
-      });
-      return tds;
+      };
     });
-
     //console.log(film);
     films.push(film);
   }
