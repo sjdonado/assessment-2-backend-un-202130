@@ -9,23 +9,24 @@ const puppeteer = require('puppeteer');
 //     browser = await puppeteer.launch();
 //     return browser
 // }
-async function getAllContent(url) {
+/* async function getAllContent(url) {
     const browser = await puppeteer.launch();
     const page = await browser.newPage();
    //await page.goto(url, { waitUntil: 'networkidle0' });
      await page.goto(url);
-        const pageTitle = await getPageTitle(page)
-        const allMoviesDetails =  await getAllMoviesDetails(page)
+        const pageTitle = await getPageTitle(page);
+        const allMoviesDetails = await getAllMoviesDetails(page);
         await browser.close();
-        return {pageTitle, allMoviesDetails: MoviesDetails}
- }
-async function getPageTitle(page) {
-    //browser = await puppeteer.launch();
-    //const page = await browser.newPage();
+        return {pageTitle, allMoviesDetails: allMoviesDetails}
+ } */
+async function getPageTitle(url) {
+    const browser = await puppeteer.launch();
+    const page = await browser.newPage();
     //await page.goto(url, { waitUntil: 'networkidle0' });
-    //await page.goto(url);
+    await page.goto(url);
+    await page.waitForSelector('head > title');
 	const title = await page.evaluate(() => document.querySelector('head > title').innerText);
-	//await browser.close();
+	await browser.close();
     return title;
 }
 /**
@@ -33,12 +34,12 @@ async function getPageTitle(page) {
  * @param {string} url
  * @returns  {ArrayConstructor}
  */
-async function getAllMoviesDetails(page) {
+async function getAllMoviesDetails(url) {
     //await page.goto(url, { waitUntil: 'networkidle0' });
-    //browser = await puppeteer.launch();
-    //const page = await browser.newPage();
-    //await page.goto(url);
-    //await page.waitForSelector('[class="my-3 col-lg-2 col-md-3 col-sm-4 col-6"] a');
+    const browser = await puppeteer.launch();
+    const page = await browser.newPage();
+    await page.goto(url);
+    await page.waitForSelector('[class="my-3 col-lg-2 col-md-3 col-sm-4 col-6"] a');
 	const links = await page.evaluate(() => {
         const elements = document.querySelectorAll('[class="my-3 col-lg-2 col-md-3 col-sm-4 col-6"] a');
 		const links = [];
@@ -49,14 +50,14 @@ async function getAllMoviesDetails(page) {
         }
         return links;
     });
-    //await page.close();
+        //await page.close();
 	  const allMoviesDetails = [];
 
 	  try {
           for(let link of links){
-            //const page = await browser.newPage();
+            const page = await browser.newPage();
             //await page.goto(link, { waitUntil: 'networkidle0' });
-            //await page.goto(url);
+            await page.goto(url);
             const detailsMovie = await page.evaluate(async (link) => {
             //Get Json from urls
             const req = await fetch(link);
@@ -81,7 +82,7 @@ async function getAllMoviesDetails(page) {
       } catch (error) {
           console.log(error);
       }
-      //await browser.close();
+      await browser.close();
 	  return allMoviesDetails;
   }
 
@@ -112,6 +113,6 @@ module.exports = {
 	getPageTitle,
 	getAllMoviesDetails,
     //initBrowser,
-    getAllContent,
+    // getAllContent,
 	//getDataDetails,
 };
