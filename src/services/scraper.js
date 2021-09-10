@@ -50,12 +50,12 @@ async function getAllMoviesDetails(url) {
         }
         return links;
     });
-        //await page.close();
+        await page.close();
 	  const allMoviesDetails = [];
 
 	  try {
           for(let link of links){
-            const page = await browser.newPage();
+            page = await browser.newPage();
             //await page.goto(link, { waitUntil: 'networkidle0' });
             await page.goto(url);
             const detailsMovie = await page.evaluate(async (link) => {
