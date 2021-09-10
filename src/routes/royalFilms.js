@@ -39,6 +39,7 @@ async function get(req, res) {
       { data: { pageTitle: pageTitle, allMoviesDetails: Mov } },
       200
     );
+    await browser.close();
   } catch (err) {
     console.log(err);
     res.writeJSONResponse({ data: null, err: err.message }, 500);
