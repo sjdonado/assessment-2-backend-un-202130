@@ -4,41 +4,25 @@ async function get(req, res) {
 	try {
 		const pageTitle = await scraper.getPageTitle('https://royal-films.com/cartelera/barranquilla');
 		const Urls = await scraper.getAllURLMovies('https://royal-films.com/cartelera/barranquilla');
-		let originalTitle,title,synopsis,starred,director,posterPhoto,trailer,Aux;
+		let originalTitle,title,synopsis,starred,director,posterPhoto,trailer,JSONFile,Identi;
 		let Mov = [];
 		for(var i = 0; i < Urls.length; i++){
-			Aux = await scraper.getMovieTextInfo(Urls[i]);
-			title = Aux[0];
-			originalTitle = Aux[1];
-			starred = Aux[2];
-			director = Aux[3];
-			synopsis = Aux[4];
-			posterPhoto = await scraper.getImage(Urls[i]);
-			trailer = await scraper.getVideo(Urls[i]);
+			Identi = String(Urls[i]);
+			Identi = Identi.replace('https://royal-films.com/pelicula/barranquilla/','');
+			Identi = Identi.substring(0,Identi.indexOf("/"));
+			JSONFile = await scraper.getAllFetchMovies(Identi);
+			title = String(JSONFile.data['title']);
+			originalTitle = String(JSONFile.data['original']);
+			starred = String(JSONFile.data['starred']);
+			director = String(JSONFile.data['director']);
+			posterPhoto = String(JSONFile.data['poster_photo']);
+			trailer = String("https://www.youtube.com/watch?v="+JSONFile.data['youtube']+"/");
 			Mov.push({originalTitle ,title, synopsis ,starred,director,posterPhoto,trailer});
 			
 		};
 
 		let AllMovieInfo = await Promise.all(Mov);
 		res.writeJSONResponse({ data: { 'pageTitle' : pageTitle, 'AllMovieInfo' : AllMovieInfo} }, 200);
-
-
-
-
-		/* console.log(Urls);
-		const Aux = await scraper.getMovieTextInfo(Urls[0]);
-		let originalTitle,title,synopsis,starred,director,posterPhoto,trailer;
-		originalTitle = Aux[0];
-		title = Aux[1];
-		synopsis = Aux[2]
-		starred = Aux[3]
-		director = Aux[4]
-		posterPhoto = await scraper.getImage(Urls[0]);
-		trailer = await scraper.getVideo(Urls[0]);
-		console.log("end");
-		AllMovieInfo = {originalTitle,title,synopsis,starred,director,posterPhoto,trailer};
-		res.writeJSONResponse({ data: { pageTitle, AllMovieInfo} }, 200);
- */
 	} catch(err) {
 		res.writeJSONResponse({ data: null, err: err.message }, 500);
 	}

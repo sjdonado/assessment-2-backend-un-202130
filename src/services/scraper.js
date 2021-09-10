@@ -89,7 +89,27 @@ async function getVideo(url) {
   
   }
 
+  async function getAllFetchMovies(identifier){
+
+	const browser = await puppeteer.launch();
+	const page = await browser.newPage();
+	const fetchurl = 'https://royal-films.com/api/v1/movie/'+identifier+'/barranquilla'
+	const fetching = await page.evaluate(async (fetchurl) => {
+		const Details = await fetch(fetchurl, {
+		  headers: {
+			"Content-Type": "application/json",
+		  },
+		  method: "GET",
+		  mode: "cors",
+		});
+		return Details.json();
+	  },fetchurl);
+
+	await browser.close();
+	return fetching;
+  }
+
 
 module.exports = {
-	getPageTitle,getAllURLMovies,getImage,getVideo,getMovieTextInfo
+	getPageTitle,getAllURLMovies,getImage,getVideo,getMovieTextInfo,getAllFetchMovies
 };
