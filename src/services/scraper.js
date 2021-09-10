@@ -24,8 +24,7 @@ async function getLinkM(url) {
   
   await page.waitForSelector('[class=movie-box]')
   const Pelis = await page.evaluate(() => { 
-	//const links=document.querySelector('[class="movie-box"]')['href'];
-	//const links=document.getElementsByClassName('[class="movie-box"]')[0].getAttribute('href');
+
 	const movies = document.querySelectorAll('[class="movie-box"]')
 	const urls = []
 	
@@ -41,9 +40,42 @@ async function getLinkM(url) {
 	return Pelis;   
   }
 
+ async function getMovies(url){
+	 try{
+		 const browser=await puppeteer.launch();
+		 const page = await browser.newPage();
+		 await page.goto(url);
+		 const movieData= await page.evaluate(async(url)=>{
+			 const movie=await fetch(url,{
+				 headers:{
+					 "Content-Type":"application/json",
+				 },
+				 method:"GET",
+				 mode:"cors",
+			 });
+			 return movie.json();
+		 },url);
+		 await browser.close();
+
+		 return{
+			 originalTitle:movieData.data['original'],
+			 title:movieData.data['title'],
+			 synopsis:movieData['synopsis'],
+			 starred:movieData.data['starred'],
+			 director: movieData.data['director'],
+			 //posterPhoto:
+			 //trailer:
+		 }
+
+	 }catch(error){
+         console.error();
+	 }
+ }
+
 
 
 module.exports = {
 	getPageTitle,
 	getLinkM,
+	getMovies,
 };
