@@ -1,10 +1,4 @@
 const puppeteer = require("puppeteer");
-
-let browser;
-(async () => {
-	browser = await puppeteer.launch();
-})();
-
 /**
  * Go to url and return the page title
  * @param {string} url
