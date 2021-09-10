@@ -56,9 +56,9 @@ async function getcaracteristics(url){
       return movie.json();
     },url);
   await browser.close(); 
-  const AllCaracteristics = {originalTitle:caracteristics.data['original'],title:caracteristics.data['title'],synopsis:caracteristics.data['synopsis'],starred:caracteristics.data['starred'],director:caracteristics.data['director'],posterPhoto: "/"+caracteristics.data['poster_photo']+"/",
-  trailer: "https://youtube.com/watch?v="+caracteristics.data.youtube+"/",}
-  return { AllCaracteristics
+  
+  return { originalTitle:caracteristics.data['original'],title:caracteristics.data['title'],synopsis:caracteristics.data['synopsis'],starred:caracteristics.data['starred'],director:caracteristics.data['director'],posterPhoto: "/"+caracteristics.data['poster_photo']+"/",
+  trailer: "https://youtube.com/watch?v="+caracteristics.data.youtube+"/",
 }
   } catch (error) {
     
