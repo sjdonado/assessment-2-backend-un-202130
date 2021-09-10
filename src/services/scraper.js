@@ -1,5 +1,7 @@
 const puppeteer = require('puppeteer');
-//const scraper = require('../services/scraper');
+const axios = require('axios')
+
+
 /**
  * Go to url and return the page title
  * @param {string} url
@@ -8,7 +10,6 @@ const puppeteer = require('puppeteer');
  async function getAllMoviesLinks(url) {
 	const browser = await puppeteer.launch();
 	const page = await browser.newPage();
-  
 	await page.goto(url, { waitUntil: 'networkidle0' });
 	await page.waitForSelector('[class="movie-box"]');
 	const links = await page.evaluate(() => {
@@ -26,7 +27,6 @@ const puppeteer = require('puppeteer');
   }
 
   async function Listing(url) {
-	
  	const links = await getAllMoviesLinks(url);
   	const linksids=[];
 	links.forEach(element => {
@@ -41,14 +41,13 @@ async function getMoviesDetails(urls) {
 	const moviesDetails = [];
 	try{
 		for(let url of urls){
-	const browser = await puppeteer.launch();
-	const page = await browser.newPage();
-	await page.goto(url, { waitUntil: 'networkidle0' });
-	const retorno = await page.evaluate(async (url) => {
+		/*const retorno = await page.evaluate(async (url) => {
 		const fet = await fetch(url);
 		const retorno = await fet.json();
 		return retorno;
-		},url);
+		},url);*/
+		const reto = await axios.get(url);
+		const retorno = reto.data;
 		moviesDetails.push({
 			originalTitle: retorno.data['original'],
 			title: retorno.data['title'],
@@ -58,7 +57,6 @@ async function getMoviesDetails(urls) {
 			posterPhoto: retorno.data['poster_photo'],
 			trailer: "https://youtube.com/watch?v="+retorno.data.youtube
 		}); 
-		await browser.close();
 	}
 	}catch(error){
 		console.log(error);
