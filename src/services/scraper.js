@@ -19,14 +19,9 @@ async function getMovieName(url) {
     }
     return links;
   });
-  console.log(enlaces);
-  console.log("enlaces ", enlaces);
   movieInfos = [];
   for (let enlace of enlaces) {
-    await page.goto(
-      enlace,
-      { waitUntil: "load" }
-    );
+    await page.goto(enlace, { waitUntil: "load" });
     await page.waitForSelector(".synopsis", { visible: true });
     await page.waitForSelector(".people", { visible: true });
     await page.screenshot({ path: "screenshot.png", fullPage: true });
@@ -47,10 +42,10 @@ async function getMovieName(url) {
       }
       return movieInfo;
     });
-	movieInfos.push(data)
+    movieInfos.push(data);
   }
   await browser.close();
-  return link;
+  return movieInfos;
 }
 
 async function getPageTitle(url) {
