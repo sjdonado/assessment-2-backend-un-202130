@@ -1,5 +1,4 @@
 const puppeteer = require('puppeteer');
-var fetch = require("fetch").fetchUrl;
 
 /**
  * Go to url and return the page title
@@ -40,21 +39,19 @@ async function getPageInfo(url) {
     return urls_array;
   });
 
-  console.log(urls);
+  //console.log(urls);
 
   const films = [];
 
   for (const url in urls) {
-    //const page = await browser.newPage();
-    console.log(urls[url]);
+    //console.log(urls[url]);
     await page.goto(urls[url], { waitUntil: 'load', timeout: 0 });
     await page.waitForTimeout(4000);
     await page.waitForSelector('table.people td');
-    //var sip = await page.evaluate(() =>);
     const film = await page.evaluate(() => {
       let tds = [];
       let data = document.querySelectorAll('table.people td');
-      let sip =  document.querySelector('p.synopsis').innerText;
+      let sip = document.querySelector('p.synopsis').innerText;
       let photo = document.querySelector('span.gaussian').style.backgroundImage.slice(4, -1).replace(/"/g, "");;
       let trailer = "https://youtube.com/watch?v=95F4ZfIjRL0";
       tds.push({
@@ -69,7 +66,7 @@ async function getPageInfo(url) {
       return tds;
     });
 
-    console.log(film);
+    //console.log(film);
     films.push(film);
   }
 
