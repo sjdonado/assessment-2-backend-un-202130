@@ -1,6 +1,6 @@
 const scraper = require('../services/scraper');
 
-async function getDetails(req, res) {
+async function get(req, res) {
     try {
         const pageTitle = await scraper.getPageTitle('https://royal-films.com/cartelera/barranquilla');
         const pageData = await scraper.getData('https://royal-films.com/cartelera/barranquilla');
@@ -21,5 +21,5 @@ async function getDetails(req, res) {
 }
 
 module.exports = {
-    getDetails,
+    get,
 };
