@@ -32,7 +32,7 @@ async function getLinkM(url) {
 	  link= $movies.getAttribute("href")
 	  const num = link.split("/")
       complete="https://royal-films.com/api/v1/movie/"+num[num.length-2]+"/barranquilla?"
-	  urls.push(link)
+	  urls.push(complete)
 	  })
 	return urls	
   })
