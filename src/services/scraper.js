@@ -16,7 +16,6 @@ async function getPageData(url) {
     const pageTitle = await page.evaluate(() => document.querySelector('head > title').innerText);
 
     await page.waitForSelector('.movie-box');
-    const allMoviesDetails = [];
     const endpoints = await page.evaluate(() => {
         const movieBoxes = document.querySelectorAll('.movie-box')
         const endpoints = [];
@@ -28,23 +27,34 @@ async function getPageData(url) {
     });
 
     await browser.close();
-
-    for (const endpoint of endpoints) {
-        await axios.get(endpoint).then(response => {
-            const movieData = response.data.data;
-            allMoviesDetails.push({
-                'originalTitle': movieData.original,
-                'title': movieData.title,
-                'synopsis': movieData.synopsis,
-                'starred': movieData.starred,
-                'director': movieData.director,
-                'posterPhoto': movieData.poster_photo,
-                'trailer': `https://youtu.be/${movieData.youtube}`
-            });
-        });
-    }
-
+    const allMoviesDetails = await getMoviesData(endpoints);
     return { pageTitle, allMoviesDetails };
+}
+
+async function getMoviesData(endpoints) {
+    const responses = [];
+    for (let endpoint of endpoints) {
+        responses.push(getMovieDataFromAPI(endpoint));
+    }
+    //validate and filter results
+    const results = await Promise.all(responses.map(p => p.catch(e => e)));
+    const validResults = results.filter(result => !(result instanceof Error));
+    return validResults;
+}
+
+async function getMovieDataFromAPI(endpoint) {
+    const resp = await axios.get(endpoint);
+    const respData = resp.data.data;
+    const movieData = {
+        'originalTitle': respData.original,
+        'title': respData.title,
+        'synopsis': respData.synopsis,
+        'starred': respData.starred,
+        'director': respData.director,
+        'posterPhoto': respData.poster_photo,
+        'trailer': `https://youtube.com/watch?v=${respData.youtube}`
+    };
+    return movieData;
 }
 
 module.exports = {
