@@ -25,18 +25,18 @@ async function getLinkM(url) {
   await page.waitForSelector('[class=movie-box]')
   const Pelis = await page.evaluate(() => { 
 
-	const movies = document.querySelectorAll('[class="movie-box"]')
+	const $movies = document.querySelectorAll('[class="movie-box"]')
 	const urls = []
 	
-	movies.forEach((movies) => {
-	  link= movies.getAttribute("href")
+	$movies.forEach(($movies) => {
+	  link= $movies.getAttribute("href")
+	  const num = link.split("/")
+      complete="https://royal-films.com/api/v1/movie/"+num[num.length-2]+"/barranquilla?"
 	  urls.push(link)
-  
 	  })
 	return urls	
   })
-  
-  await browser.close();
+    await browser.close();
 	return Pelis;   
   }
 
@@ -63,12 +63,12 @@ async function getLinkM(url) {
 			 synopsis:movieData['synopsis'],
 			 starred:movieData.data['starred'],
 			 director: movieData.data['director'],
-			 //posterPhoto:
-			 //trailer:
+			 posterPhoto: "/"+movieData.data['poster_photo']+"/",
+			 trailer: "https://youtube.com/watch?v="+movieData.data.youtube+"/",
 		 }
 
 	 }catch(error){
-         console.error();
+         //console.error();
 	 }
  }
 
