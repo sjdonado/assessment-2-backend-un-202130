@@ -9,8 +9,8 @@ async function get(req, res) {
 			details_movie = scraper.getDataMovie('https://royal-films.com/cartelera/barranquilla', urls_movies_api[index]);
 			details_movie_arry.push(details_movie);
 		}
-		let x = await Promise.all(details_movie_arry);
-		res.writeJSONResponse({ data: { pageTitle: title, allMoviesDetails: x } }, 200);
+		let all_data = await Promise.all(details_movie_arry);
+		res.writeJSONResponse({ data: { pageTitle: title, allMoviesDetails: all_data } }, 200);
 	} catch (err) {
 		res.writeJSONResponse({ data: null, err: err.message }, 500);
 	}

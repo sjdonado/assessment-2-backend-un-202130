@@ -46,7 +46,7 @@ async function getIDs(url) {
  * and finally return the information collected to make the json array
  * @param {string} url
  * @param {string} path
- * @returns {string}
+ * @returns {JSON-Array}
  */
 
 async function getDataMovie(url, path) {
@@ -58,7 +58,6 @@ async function getDataMovie(url, path) {
 			method: "GET",
 		});
 		const info_page = await movie.json();
-		//Enviamos el Json
 		return info_page;
 	}, path);
 	const details_movie = fetch_movie.data;
